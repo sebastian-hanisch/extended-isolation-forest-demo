@@ -45,6 +45,7 @@ from eif_presets import (
     load_permalink_settings,
     psi_max,
     randomize_seed,
+    seed_widget,
     sync_query_params,
 )
 from eif_visualization import (
@@ -219,6 +220,7 @@ with st.sidebar:
              "robust 0.40 - bei nur 2 % Anomalien 0.81 gegen 0.56.",
     )
     if kind != "gap":
+        seed_widget("strength_slider")
         strength = st.slider(
             "Abstand der Anomalien (Faktor-σ)", *bounds("strength_slider"), key="strength_slider", step=0.5,
             help="Wie weit die Anomalien im Faktorraum vom Normalen entfernt sind. Bei 3 / 4 / 6 / 9 / 12: AUC beider Wälder 0.96 / 0.99 / 1.00 / 1.00 / 1.00; F1 des Isolation Forest 0.66 / 0.85 / 0.96 / 0.99 / 1.00, des Extended IF "
@@ -227,7 +229,6 @@ with st.sidebar:
         st.session_state["_strength_kept"] = strength
     else:
         strength = float(st.session_state.get("_strength_kept", C.DEFAULT_STRENGTH))
-        st.session_state["strength_slider"] = strength
 
     st.markdown("**Extended Isolation Forest**")
     p_total = int(p_features) + int(n_noise)
@@ -255,11 +256,13 @@ with st.sidebar:
              "dann entscheidet nur die Rangfolge, aber der Anteil muss bekannt sein.",
     )
     if threshold_kind == "standard":
+        seed_widget("cutoff_slider")
         cutoff = st.slider(
             "Score-Schwelle (beide Wälder)", *bounds("cutoff_slider"), key="cutoff_slider", step=0.01,
             help="Ab welchem Anomalie-Wert eine Tour markiert wird. Bei 0.45 / 0.5 / 0.55 / 0.6 / 0.65: F1 des Isolation Forest 0.82 / 0.96 / 0.97 / 0.83 / 0.55, des Extended IF 0.92 / 0.98 / 0.85 / 0.40 / 0.04 (Recall 0.99 / 0.97 / 0.75 / 0.25 / 0.02): "
                  "die Scores des Extended IF liegen niedriger, sein Fenster reicht weniger weit nach oben.",
         )
+        seed_widget("quantile_slider")
         quantile = st.slider(
             "Schwelle: χ²-Quantil (klassisch, robust)", *bounds("quantile_slider"), key="quantile_slider", step=0.001, format="%.3f",
             help="Ab welchem Anteil der χ²-Verteilung eine Tour bei den Schätzern der Wurzel als Anomalie gilt. Bei 0.9 / 0.95 / 0.975 / 0.99 / 0.999: F1 der robusten Schätzung 0.67 / 0.77 / 0.84 / 0.89 / 0.90, "
@@ -268,8 +271,8 @@ with st.sidebar:
         st.session_state["_cutoff_kept"] = cutoff
         st.session_state["_quantile_kept"] = quantile
         share = int(st.session_state.get("_share_kept", C.DEFAULT_SHARE))
-        st.session_state["share_slider"] = share
     else:
+        seed_widget("share_slider")
         share = st.slider(
             "Angenommener Anteil der Anomalien [%]", *bounds("share_slider"), key="share_slider",
             help="Wie viele Touren als Anomalie markiert werden (die größten Werte, für alle vier Detektoren). Beim wahren Anteil 10 % ist der F1 bei angenommenen 2 / 5 / 10 / 20 / 40 % beim Isolation Forest "
@@ -278,7 +281,6 @@ with st.sidebar:
         st.session_state["_share_kept"] = share
         cutoff = float(st.session_state.get("_cutoff_kept", C.DEFAULT_CUTOFF))
         quantile = float(st.session_state.get("_quantile_kept", C.DEFAULT_QUANTILE))
-        st.session_state["cutoff_slider"], st.session_state["quantile_slider"] = cutoff, quantile
     seed = st.number_input("Zufalls-Seed", *bounds("seed_input"), key="seed_input", step=1)
     st.button("🎲 Neue Aufnahme generieren", width="stretch", on_click=randomize_seed, help="Würfelt einen neuen Zufalls-Seed für die Touren und die Anomalien.")
 

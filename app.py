@@ -582,7 +582,7 @@ if st.session_state.get("cost_on"):
     c2.markdown("**Extended IF auf standardisierten Kennzahlen gegen Rohdaten**")
     c2.table({"": ["standardisiert", "Rohdaten (Meter, Minuten, ...)"], "AUC": [f"{ct['units'][0]['eif_auc']:.2f}", f"{ct['units'][1]['eif_auc']:.2f}"], "F1 bei der Schwelle": [f"{ct['units'][0]['eif_f1']:.2f}", f"{ct['units'][1]['eif_f1']:.2f}"],
               "Recall": [f"{ct['units'][0]['eif_recall']:.2f}", f"{ct['units'][1]['eif_recall']:.2f}"]})
-    st.caption("Mittel über 3 bzw. 5 feste Datensätze. Beide Wälder sind numpy-Implementierungen mit derselben Baum-Bauweise; der Extended IF ist etwas langsamer als der Isolation Forest (auf diesem Rechner 0.09 s gegen 0.07 s bei 2 Merkmalen, 0.18 s gegen 0.14 s bei 12, 0.29 s gegen 0.27 s bei 30). "
+    st.caption("Mittel über 3 bzw. 5 feste Datensätze. Beide Wälder sind numpy-Implementierungen mit derselben Baum-Bauweise; der Extended IF ist etwas langsamer als der Isolation Forest (Faktor etwa 1.1 bis 1.4 über 2, 12 und 30 Merkmale; die absoluten Sekunden zeigt das Diagramm, sie hängen vom Rechner ab). "
                "Die Einheiten spielen für den Isolation Forest keine Rolle, für den Extended IF schon: auf Rohdaten dominiert die Distanz in Metern die Richtung der Schnitte (AUC 0.93, F1 0.65 statt 1.00 und 0.98).")
 
 st.markdown("---")

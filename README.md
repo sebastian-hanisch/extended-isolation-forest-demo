@@ -12,9 +12,9 @@ Der Extended Isolation Forest ersetzt jeden Schnitt durch eine **zufällige Hype
 Dieses Stück schließt den Ast der Zufallsbäume; die Linie hat **keinen Konvergenzpunkt**.
 ```
 elliptic-envelope-demo (Wurzel: robuste Ellipse)
-  ├─ ECOD                       (Kontrast: verteilungsfrei)                       [nicht gebaut]
-  ├─ LOF → Feature Bagging      (lokale Dichte; Ensembles gegen viele Merkmale)   [nicht gebaut]
-  ├─ One-Class SVM → Deep SVDD  (gelernte Grenze)                                 [nicht gebaut]
+  ├─ ECOD                       (Kontrast: verteilungsfrei)                       [gebaut]
+  ├─ LOF → Feature Bagging      (lokale Dichte; Ensembles gegen viele Merkmale)   [beide gebaut]
+  ├─ One-Class SVM → Deep SVDD  (gelernte Grenze)                                 [beide gebaut]
   ├─ isolation-forest-demo → extended-isolation-forest-demo (Zufallsbäume)        [dieses Stück: Ast geschlossen]
   └─ autoencoder-anomalie-demo  (Rekonstruktionsfehler)                           [gebaut]
 ```
@@ -30,7 +30,7 @@ elliptic-envelope-demo (Wurzel: robuste Ellipse)
 | Dichte Gruppe abseits | ❌ AUC 0.95 / 0.85 / 0.70 gegen 0.97 / 0.85 / 0.57 (Isolation Forest / Extended IF) bei 10 / 20 / 30 %; an der Schwelle bei 20 % **F1 0.44 gegen 0.13** (Recall 0.44 gegen 0.09); robust 1.00 bis 25 %, dann 0.49 |
 | Anomalien in der Lücke | ❌ zwei Betriebsarten, 10 %: AUC **0.54** (Isolation Forest), **0.38** (Extended IF), 0.40 (klassisch und robust) – die schrägen Schnitte umschließen die dichte Gruppe zwischen den Betriebsarten noch besser; bei 2 %: 0.81 gegen 0.56; drei Betriebsarten 0.27 gegen 0.31 |
 | Viele Anomalien | ❌ bei 45 %: F1 0.81 (Isolation Forest) gegen 0.42 (Extended IF), Recall 0.68 gegen 0.27; wenige Anomalien dagegen ✅: bei 2 % F1 0.42 gegen 0.69 |
-| Schwelle | ⚠️ Score-Schwelle 0.45 / 0.5 / 0.55 / 0.6 / 0.65: F1 0.82 / 0.96 / **0.97** / 0.83 / 0.55 (Isolation Forest) gegen **0.92 / 0.98** / 0.85 / 0.40 / 0.04 (Extended IF): die Scores des Extended IF liegen niedriger, das brauchbare Fenster liegt bei 0.45–0.5. Ein falsch angenommener Anteil (½× / 2×) senkt F1 bei allen Detektoren gleich (0.97 / 0.99 → 0.67) |
+| Schwelle | ⚠️ Score-Schwelle 0.45 / 0.5 / 0.55 / 0.6 / 0.65: F1 0.82 / 0.96 / **0.97** / 0.83 / 0.55 (Isolation Forest) gegen **0.92 / 0.98** / 0.85 / 0.40 / 0.04 (Extended IF): die Scores des Extended IF liegen niedriger, das brauchbare Fenster (F1 ≥ 0.8) liegt bei 0.45–0.55. Ein falsch angenommener Anteil (½× / 2×) senkt F1 bei allen Detektoren gleich (0.97 / 0.99 → 0.67) |
 | Bäume | ✅ AUC schon bei 10 Bäumen 1.00; F1 des Extended IF an der Schwelle 0.95 / 0.98 / 0.97 bei 10 / 25 / 50 Bäumen (Recall bei 10 Bäumen 0.91) |
 | Einheiten | ⚠️ Der Extended IF ist **nicht skaleninvariant**: auf Rohdaten (Meter, Minuten, ...) AUC 0.93, F1 0.65, Recall 0.73 statt 1.00, 0.98 und 0.97 – die Kennzahlen müssen standardisiert werden (der Isolation Forest ist skaleninvariant) |
 | Rechenzeit | ✅ Der Extended IF ist etwas langsamer, aber nicht um Größenordnungen: Faktor 1.1–1.3 (0.09 / 0.18 / 0.29 s gegen 0.07 / 0.14 / 0.27 s bei 2 / 12 / 30 Merkmalen; rechnerabhängig) |
@@ -123,6 +123,4 @@ pytest tests/ -v
 
 ---
 
-Teil des [Operations-Research-Demo-Portfolios](https://sebastianhanisch.net/demos.html) von
-[Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning.
-Interesse an einer maßgeschneiderten Lösung? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Anomalie-Erkennung: Ellipse bis Autoencoder](https://sebastianhanisch.net/konzepte-anomalie-erkennung.html).

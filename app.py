@@ -551,8 +551,8 @@ if st.session_state.get("threshold_on"):
     st.table({"Tourenzahl": [r["n"] for r in tt["normal_scores"]], "mittlerer Score der normalen Touren: Isolation Forest": [f"{r['iforest']:.3f}" for r in tt["normal_scores"]],
               "Extended IF": [f"{r['eif']:.3f}" for r in tt["normal_scores"]]})
     st.caption("Links: die Scores des Extended IF liegen niedriger - bei der Schwelle 0.45 markiert er nur 1.8 % der normalen Touren (Isolation Forest 5.0 %), bei 0.6 aber nur noch 25 % der Anomalien (Isolation Forest 71 %): "
-               "sein brauchbares Fenster (F1 ≥ 0.8) liegt bei 0.45-0.5 und endet unter 0.55, das des Isolation Forest reicht von 0.45 bis 0.6. "
-               "Rechts: ein falsch angenommener Anteil kostet alle vier Detektoren gleich viel, denn dann entscheidet nur die Rangfolge. Tabelle: der mittlere Score der normalen Touren fällt beim Isolation Forest mit der Tourenzahl von 0.43 auf 0.38, "
+               "sein brauchbares Fenster (F1 ≥ 0.8) liegt bei 0.45-0.55 und endet vor 0.6, das des Isolation Forest reicht von 0.45 bis 0.6. "
+               "Rechts: ein falsch angenommener Anteil lässt alle vier Detektoren auf ähnlich niedrige F1-Werte fallen (0.56-0.67 bei halbem oder doppeltem Anteil), denn dann entscheidet nur die Rangfolge. Tabelle: der mittlere Score der normalen Touren fällt beim Isolation Forest mit der Tourenzahl von 0.43 auf 0.38, "
                "beim Extended IF von 0.39 auf 0.37 - er hängt weniger an der Stichprobengröße.")
 
 st.markdown("---")
@@ -566,7 +566,7 @@ if st.session_state.get("masking_on"):
     st.plotly_chart(build_masking(mk), width="stretch", key="masking_chart")
     st.caption("Mittel über 5 feste Datensätze, eine Betriebsart. Bis 15 % Gruppenanteil sind die Wälder gleich (AUC 0.91), bei 20 % ebenfalls (0.85) - aber bei der Schwelle findet der Isolation Forest 44 % der Gruppe, der Extended IF nur 9 % (F1 0.44 und 0.13). "
                "Die robuste Schätzung trennt bis 25 % perfekt (1.00) und kippt bei 30 % auf 0.49, die Wälder fallen langsamer (0.70 und 0.57 bei 30 %). Ab 40 % versagen alle: die Gruppe ist dann der Normalbereich, der Extended IF mit 0.35 und 0.20 am deutlichsten unter Raten. "
-               "Rechts: eine kleinere Unterstichprobe hilft beim Isolation Forest (AUC 0.84 mit ψ = 16, 0.70 mit ψ = 256), beim Extended IF weniger (0.85 gegen 0.57).")
+               "Rechts: eine kleinere Unterstichprobe hilft beim Isolation Forest (AUC 0.84 mit ψ = 16, 0.70 mit ψ = 256), beim Extended IF noch stärker (0.85 gegen 0.57).")
 
 st.markdown("---")
 
@@ -603,7 +603,7 @@ st.markdown(
 """
 )
 st.caption(
-    "Die Nachbarn der Anomalie-Erkennung-Linie: die Wurzel Elliptic Envelope und der Isolation Forest (gebaut), LOF und Feature Bagging, One-Class SVM und Deep SVDD, ECOD und ein Autoencoder (noch nicht gebaut). "
+    "Die Nachbarn der Anomalie-Erkennung-Linie: die Wurzel Elliptic Envelope, der Isolation Forest, LOF, Feature Bagging, One-Class SVM, Deep SVDD, ECOD und der Autoencoder (alle gebaut). "
     "Keiner ist überlegen: der Extended IF beseitigt ein messbares Artefakt des Isolation Forest, bringt aber sonst nur in einigen Fällen (Rauschmerkmale, dichte Gruppen) und bleibt ein Schwellenproblem."
 )
 
@@ -637,6 +637,6 @@ st.markdown("---")
 
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zur Reihe: [Anomalie-Erkennung: Ellipse bis Autoencoder](https://sebastianhanisch.net/konzepte-anomalie-erkennung.html)."
 )
